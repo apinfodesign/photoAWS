@@ -17,7 +17,7 @@ gulp.task('lint', function() {
         .pipe(jshint.reporter('default'));
 });
 
-// Compile Our Sass
+// Compile Our Sass 
 gulp.task('sass', function() {
     return gulp.src('scss/*.scss')
         .pipe(sass())
@@ -49,11 +49,12 @@ gulp.task('watch', function() {
 gulp.task('server', function(){
     nodemon({
         script: 'server.js',
-        ect:    'js',
+        ect:    'js html',   // watch for changes to all .js and .html
         ignore: ['ng*', 'gulp*', 'assets*']
     });
 });
 
+// Default Task
 gulp.task('default',['lint', 'sass', 'scripts', 'server'],  function(){
 });
 

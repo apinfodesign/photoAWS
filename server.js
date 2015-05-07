@@ -15,7 +15,9 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+
+//mh delete to change to html
+//app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -29,6 +31,9 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/photos', photos);
 app.use('/albums', albums);
+
+//added on p42fullpix model
+app.use(express.static('./public/partials'));
 
  
 
