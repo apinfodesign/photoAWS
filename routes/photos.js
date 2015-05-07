@@ -33,13 +33,13 @@ router.post('/upload', function(req, res) {
 
  		model.createPhoto(params, function(err, obj){
 			if(err){
-					res.status(400).send({error: 'Invalid photo data'});
+					res.status(400).send({error: 'Invalid photo data 1'});
 			} else {
 				res.send(obj);
 			}
  		});
 	} else {
-		res.status(400).send({error: 'Invalid photo data'});				
+		res.status(400).send({error: 'Invalid photo data 2'});				
 	}
 });
 
