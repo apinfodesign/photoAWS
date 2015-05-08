@@ -12,7 +12,11 @@ var router = express.Router();
 // });
 
 router.get('/', function(req, res) {
-  res.sendfile("views/index.html");
+//  res.sendfile("views/index.html");
+//  res.render('views/index.html');
+	res.sendFile(path.join(__dirname, '/public/partials/index.html'));
+	console.log('home page....');
+
 });
 
 

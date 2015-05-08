@@ -5,19 +5,28 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var debug = require('debug')('photoalbums');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
 var albums = require('./routes/albums');
 var globals = require('./lib/globals');
-var mysql       = require('mysql');
+
+var mysql = require('mysql');
 var app = express();
+
+//var ejs = require('ejs');///try to get html instead of jade
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 
 //mh delete to change to html
-//app.set('view engine', 'jade');
+app.set('view engine', 'jade');
+
+////try this to make html work instead of jade
+//app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'html');
+/////////////////////////////////////////////
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -25,17 +34,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+//needed to server static assets
+app.use(express.static(path.join(__dirname, 'public'))); 
+//added on p42fullpix model - required for html 
+app.use(express.static('./public/partials'));
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/photos', photos);
 app.use('/albums', albums);
-
-//added on p42fullpix model
-app.use(express.static('./public/partials'));
-
- 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
