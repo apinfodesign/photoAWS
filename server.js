@@ -85,9 +85,9 @@ console.log(globals + " is globals first");
 var server = app.listen(app.get('port'), function() {
 
   debug('Express server listening on port ' + server.address().port);
-    var connection  = mysql.createConnection(globals.database);
+    var connection  = mysql.createConnection(globals.database() );
 
-    console.log(  globals.database + " is globals.database ");
+    console.log(  globals.database() + " is globals.database ");
 
     connection.connect(function(err) {
         if(err){
