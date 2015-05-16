@@ -20,6 +20,33 @@ router.get('/id/:id', function(req, res) {
 	}
 });
 
+
+/* Search function 4-1 */
+/* GET photo search */ 
+
+router.get('/ search', function( req, res) {
+	 if( req.param(' query')){
+	 	var params = { 
+	 	query : req.param(' query') 
+	 	} 
+	 	model.getPhotosSearch( params,
+function( err, obj){
+		if( err){
+			res.status( 400).send({ error:
+			 'Invalid photo search'});
+			  } else{
+			  	res.send( obj);
+			  }
+			  	}); 
+	 		} else {
+	 			res.status( 400).send({ error: 'No search term found.'}); 
+	 		} 
+});
+
+
+
+
+
 /* POST create photo. */
 router.post('/upload', function(req, res) {
  	if(req.param('albumID') && req.param('userID')){
