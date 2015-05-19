@@ -25,6 +25,11 @@ router.get('/id/:id', function(req, res) {
 /* GET photo search */ 
 
 router.get('/search', function(req, res) {
+
+	/*adding */
+	res.header('Cache-Control', 'no-cache, no-store');
+	/*adding*/
+
 	 if(req.param('query')){
 	 	var params = { 
 	 	query : req.param('query') 

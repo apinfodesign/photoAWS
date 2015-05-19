@@ -4,6 +4,14 @@ var model 		= require('./../lib/model/model-albums');
 
 /* GET album by ID */
 router.get('/id/:albumID', function(req, res) {
+
+	/*added*/
+	res.header("Cache-Contro", "public, max-age-10");
+	res.header("Expires", new Date(Date.now() + 10000).toUTCString() );
+
+	/*added*/
+
+
 	if(req.param('albumID')){
 		var params = {
 			albumID : req.param('albumID')
