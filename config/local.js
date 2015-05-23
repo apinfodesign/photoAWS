@@ -4,7 +4,7 @@ module.exports = {
 		port 					: 3306,
   		database 				: 'photoalbum',
 		user     				: 'root',
- 		password 	: 'rootfortheteam'
+ 		password 					: 'rootfortheteam'
 		}
 	}
 }

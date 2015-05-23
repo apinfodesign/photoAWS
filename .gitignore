@@ -1,5 +1,5 @@
 globals
 node_modules
-local
-local.js
-
+config/local
+/config/*
+config/local.js
