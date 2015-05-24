@@ -55,8 +55,8 @@ router.get('/search', function(req, res) {
 router.post('/upload', function( req, res) {
  	if(req.param('albumID') && req.param('userID') && req.files.photo){
  		 var params = {
- 		 	userID : req.param(' userID'),
- 		 	albumID : req.param(' albumID')
+ 		 	userID : req.param('userID'),
+ 		 	albumID : req.param('albumID')
  		 } 
  		 if(req.param('caption') ) {
  		 	params.caption = req.param('caption');
@@ -71,25 +71,25 @@ router.post('/upload', function( req, res) {
 
  		 	 	uploadPhoto(params, function( err, fileObject){
  		 	 	if( err){
- 		 	 		res.status(400).send({ error: 'Invalid photo data 1'}); 
+ 		 	 		res.status(400).send({error: 'Invalid photo data 1'}); 
  		 	 	} else { 
  		 	 		params.url = fileObject.url; 
  		 	 		delete params.filePath; 
  		 	 		delete params.newFilename; 
- 		 	 		model.createPhoto(params, function( err, obj){
+ 		 	 		model.createPhoto(params, function(err, obj){
 			 	 	if(err){
-			 	 		res.status(400). send({ error: 'Invalid photo data 2'}); 
+			 	 		res.status(400). send({error: 'Invalid photo data 2'}); 
  		 	 		} else { 
  		 	 		res.send(obj);}
  		 	 	}); 
- 		 	 } 
+ 		 	  } 
  		 	}); 
  		 	} else {
  		 	res.status(400).send({error: 'Invalid photo data 3'}); 
  		 } 
  		}); 
  		} else {
- 			res.status(400).send({ error: 'Invalid photo data 4'}); 
+ 			res.status(400).send({error: 'Invalid photo data 4'}); 
  	} 
  });
  
@@ -155,10 +155,10 @@ function uploadPhoto(params, callback){
 						putS3Object(uploadData, function(err,data){ 
 							if( err){callback(err); 
 							} else {
-							fs.unlink(params.filePath, function (err) {
-							if(err){ callback( err); 
+							fs.unlink(params.filePath, function(err) {
+							if(err){callback( err); 
 							} else { 
-							callback( null, {url: uploadPath}); 
+							callback(null, {url: uploadPath}); 
 						}
 					});
 				} 
@@ -175,8 +175,8 @@ function putS3Object( uploadData, callback){
 		} 
 		var s3 = new aws.S3();
 
-		s3.putObject(uploadData, function( err, data) {
-		if( err){ callback( err); 
+		s3.putObject(uploadData, function(err, data) {
+		if(err){ callback(err); 
 		} else {
 		callback(null, data); 
 		} 

@@ -3,3 +3,5 @@ node_modules
 config/local
 /config/*
 config/local.js
+testPhotos
+testPhotos/*
