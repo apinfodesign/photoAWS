@@ -176,7 +176,7 @@ function uploadPhoto(params, callback){
 		if( err){callback(err);
 		} else {
 
-		console.log("message 5 - uploadphoto here");
+		console.log("message 5 - uploadphoto here YES");
 
 		var contentType = 'image/jpeg'; 
 		var uploadPath = 'uploads/' + params.newFilename; 
@@ -188,7 +188,7 @@ function uploadPhoto(params, callback){
 					contentType	: contentType 
 					}
 
-		console.log("message 6 here YES");
+		console.log("message 6 - uploadphoto here YES");
 
 
 		putS3Object(uploadData, function(err, data){ 
