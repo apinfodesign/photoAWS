@@ -5,3 +5,5 @@ config/local
 config/local.js
 testPhotos
 testPhotos/*
+/tmp
+/tmp/*.jpg
