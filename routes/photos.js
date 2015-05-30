@@ -1,7 +1,9 @@
 var express 	= require('express');
 var router 		= express.Router();
 var model 		= require('./../lib/model/model-photos');
-var globals = require('./../lib/globals');
+var globals 	= require('./../lib/globals');
+var fs = require('fs');
+
 
 
 /* GET photo by ID */
@@ -53,27 +55,53 @@ router.get('/search', function(req, res) {
 
 /* new upload post route */
 router.post('/upload', function( req, res) {
+			
+	console.log(".........");
+	console.log("albumID "+ req.param('albumID'));
+	console.log("userID " + req.param('userID'));
+	console.log("req.files.photo " + req.files.photo);
+
+
  	if(req.param('albumID') && req.param('userID') && req.files.photo){
+
  		 var params = {
  		 	userID : req.param('userID'),
  		 	albumID : req.param('albumID')
- 		 } 
+ 		 };
+
+ 		 console.log(params.userID + "zzzzz");
+
+
  		 if(req.param('caption') ) {
  		 	params.caption = req.param('caption');
  		 	} 
 
+ 		  console.log(params.userID + "yyyyyy");
+ 		  console.log(req.files.photo.path + "ffffffff");
+
+
  		 fs.exists(req.files.photo.path, function(exists) {
  		 	if(exists) {
+
+ 		 	console.log(params + "rrrrrrr");
+
  		 	params.filePath = req.files.photo.path;
+
+ 		    console.log(params.filePath + "eeeeee");
+
+
  		 	 	var timestamp = Date.now();
  		 	 	params.newFilename = params.userID + '/' + 
  		 	 		params.filePath.replace('tmp/', timestamp); 
 
- 		 	 	uploadPhoto(params, function( err, fileObject){
- 		 	 	if( err){
- 		 	 		res.status(400).send({error: 'Invalid photo data 1'}); 
+ 		 	 	uploadPhoto(params, function(err, fileObject){
+ 		 	 	if(err){
+ 		 	 		res.status(400).send({error: 'Invalid photo data 1b'}); 
  		 	 	} else { 
  		 	 		params.url = fileObject.url; 
+
+ 		 	 		console.log(params.url + "xxxxx");
+
  		 	 		delete params.filePath; 
  		 	 		delete params.newFilename; 
  		 	 		model.createPhoto(params, function(err, obj){
@@ -89,7 +117,10 @@ router.post('/upload', function( req, res) {
  		 } 
  		}); 
  		} else {
- 			res.status(400).send({error: 'Invalid photo data 4'}); 
+ 			console.log("error 4aaa"); 
+ 
+ 			res.status(400).send({error: 'Invalid photo data 4a'}); 
+
  	} 
  });
  
@@ -144,17 +175,28 @@ function uploadPhoto(params, callback){
 	fs.readFile(params.filePath, function(err, imgData) { 
 		if( err){callback(err);
 		} else {
+
+		console.log("message 5 - uploadphoto here");
+
 		var contentType = 'image/jpeg'; 
 		var uploadPath = 'uploads/' + params.newFilename; 
-		var uploadData = {Bucket: globals.awsVariables().bucket, 
-						Key			: uploadPath, 
-						Body		: imgData, 
-						ACL			:'public-read', 
-						contentType	: contentType 
-						} 
-						putS3Object(uploadData, function(err,data){ 
+		var uploadData = {
+					Bucket: globals.awsVariables().bucket, 
+					Key			: uploadPath, 
+					Body		: imgData, 
+					ACL			:'public-read', 
+					contentType	: contentType 
+					}
+
+		console.log("message 6 here YES");
+
+
+		putS3Object(uploadData, function(err, data){ 
 							if( err){callback(err); 
 							} else {
+
+							console.log("message 7 putS3Object here NOT YET");
+
 							fs.unlink(params.filePath, function(err) {
 							if(err){callback( err); 
 							} else { 
@@ -163,6 +205,9 @@ function uploadPhoto(params, callback){
 					});
 				} 
 			});
+
+
+
 		}
 	}); 
 }
@@ -170,14 +215,26 @@ function uploadPhoto(params, callback){
 function putS3Object( uploadData, callback){ 
 	var aws = require('aws-sdk'); 
 	if( globals.awsVariables().key){
+
+		console.log("inside putS3Object YES WE GET HERE");
+
 		aws.config.update({ accessKeyId: globals.awsVariables().key, 
-						secretAccessKey: globals.awsVariables().secret }); 
+						secretAccessKey: globals.awsVariables().secret });
+
+
 		} 
+
+		console.log("the accessKeyID is " + globals.awsVariables().key);
+
 		var s3 = new aws.S3();
 
 		s3.putObject(uploadData, function(err, data) {
-		if(err){ callback(err); 
+		if(err){
+			console.log("inside putS3Object Message 2");
+
+			callback(err); 
 		} else {
+
 		callback(null, data); 
 		} 
 	}); 
