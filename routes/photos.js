@@ -69,15 +69,15 @@ router.post('/upload', function( req, res) {
  		 	albumID : req.param('albumID')
  		 };
 
- 		 console.log(params.userID + "zzzzz");
+ 		 console.log(params.userID + "  zzzzz");
 
 
  		 if(req.param('caption') ) {
  		 	params.caption = req.param('caption');
  		 	} 
 
- 		  console.log(params.userID + "yyyyyy");
- 		  console.log(req.files.photo.path + "ffffffff");
+ 		  console.log(params.userID + "  yyyyyy");
+ 		  console.log(req.files.photo.path + " ffffff");
 
 
  		 fs.exists(req.files.photo.path, function(exists) {
@@ -88,7 +88,6 @@ router.post('/upload', function( req, res) {
  		 	params.filePath = req.files.photo.path;
 
  		    console.log(params.filePath + "eeeeee");
-
 
  		 	 	var timestamp = Date.now();
  		 	 	params.newFilename = params.userID + '/' + 
@@ -193,6 +192,8 @@ function uploadPhoto(params, callback){
 
 		putS3Object(uploadData, function(err, data){ 
 							if( err){callback(err); 
+								console.log("message 6a error YES ");
+								console.log("data is ?" + data);
 							} else {
 
 							console.log("message 7 putS3Object here NOT YET");
@@ -212,7 +213,7 @@ function uploadPhoto(params, callback){
 	}); 
 }
 
-function putS3Object( uploadData, callback){ 
+function putS3Object(uploadData, callback){ 
 	var aws = require('aws-sdk'); 
 	if( globals.awsVariables().key){
 
@@ -228,9 +229,21 @@ function putS3Object( uploadData, callback){
 
 		var s3 = new aws.S3();
 
+		console.log("uploadPath is " + uploadData.Key);
+		console.log("ACL is " + uploadData.ACL);
+		console.log("contentType is " + uploadData.contentType);
+
+ 	// Bucket: globals.awsVariables().bucket, 
+	// 				Key			: uploadPath, 
+	// 				Body		: imgData, 
+	// 				ACL			:'public-read', 
+	// 				contentType	: contentType 
+	// 				}
+
+
 		s3.putObject(uploadData, function(err, data) {
 		if(err){
-			console.log("inside putS3Object Message 2");
+			console.log("inside putS3Object Message 2 putObject FAILS");
 
 			callback(err); 
 		} else {
@@ -240,7 +253,5 @@ function putS3Object( uploadData, callback){
 	}); 
 }
  
-
-
 
 module.exports = router;
