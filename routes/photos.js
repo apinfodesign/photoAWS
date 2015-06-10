@@ -3,6 +3,7 @@ var router 		= express.Router();
 var model 		= require('./../lib/model/model-photos');
 var globals 	= require('./../lib/globals');
 var fs = require('fs');
+var aws = require('aws-sdk'); 
 
 
 
@@ -59,7 +60,7 @@ router.post('/upload', function( req, res) {
 	console.log(".........");
 	console.log("albumID "+ req.param('albumID'));
 	console.log("userID " + req.param('userID'));
-	console.log("req.files.photo " + req.files.photo);
+	console.dir("req.files.photo " + req.files.photo);
 
 
  	if(req.param('albumID') && req.param('userID') && req.files.photo){
@@ -83,7 +84,7 @@ router.post('/upload', function( req, res) {
  		 fs.exists(req.files.photo.path, function(exists) {
  		 	if(exists) {
 
- 		 	console.log(params + "rrrrrrr");
+ 		 	console.log(params.userID + "rrrrrrr");
 
  		 	params.filePath = req.files.photo.path;
 
@@ -93,9 +94,13 @@ router.post('/upload', function( req, res) {
  		 	 	params.newFilename = params.userID + '/' + 
  		 	 		params.filePath.replace('tmp/', timestamp); 
 
+ 		    console.log(params.filePath + "ggggggggg");
+
+
  		 	 	uploadPhoto(params, function(err, fileObject){
  		 	 	if(err){
- 		 	 		res.status(400).send({error: 'Invalid photo data 1b'}); 
+ 		 	 		 res.status(400).send({error: 'Invalid photo data 1b'});
+
  		 	 	} else { 
  		 	 		params.url = fileObject.url; 
 
@@ -180,7 +185,7 @@ function uploadPhoto(params, callback){
 		var contentType = 'image/jpeg'; 
 		var uploadPath = 'uploads/' + params.newFilename; 
 		var uploadData = {
-					Bucket: globals.awsVariables().bucket, 
+					bucket      : globals.awsVariables().bucket, 
 					Key			: uploadPath, 
 					Body		: imgData, 
 					ACL			:'public-read', 
@@ -206,15 +211,12 @@ function uploadPhoto(params, callback){
 					});
 				} 
 			});
-
-
-
 		}
 	}); 
 }
 
 function putS3Object(uploadData, callback){ 
-	var aws = require('aws-sdk'); 
+	//var aws = require('aws-sdk'); 
 	if( globals.awsVariables().key){
 
 		console.log("inside putS3Object YES WE GET HERE");
@@ -229,11 +231,12 @@ function putS3Object(uploadData, callback){
 
 		var s3 = new aws.S3();
 
-		console.log("uploadPath is " + uploadData.Key);
-		console.log("ACL is " + uploadData.ACL);
+		console.log("uploadData.bucket is " + uploadData.bucket);
+		console.log("uploadPath is "  + uploadData.Key);
+		console.log("ACL is " 		  + uploadData.ACL);
 		console.log("contentType is " + uploadData.contentType);
 
- 	// Bucket: globals.awsVariables().bucket, 
+	// Bucket: globals.awsVariables().bucket, 
 	// 				Key			: uploadPath, 
 	// 				Body		: imgData, 
 	// 				ACL			:'public-read', 
@@ -245,7 +248,7 @@ function putS3Object(uploadData, callback){
 		if(err){
 			console.log("inside putS3Object Message 2 putObject FAILS");
 
-			callback(err); 
+			// callback(err); 
 		} else {
 
 		callback(null, data); 

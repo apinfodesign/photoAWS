@@ -7,3 +7,5 @@ testPhotos
 testPhotos/*
 /tmp
 /tmp/*.jpg
+apex.js
+/routes/apex.js
